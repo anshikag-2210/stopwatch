@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+   
+	<meta charset="utf-8">
+		<meta name="viewport" content="width-device-width , initial-scale=1, user-scalable=yes">
+  <meta http-equiv="X-UA-Compatible" content="IE-edge">
+     <title>stopwatch</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="stopwatch.css">
+      <style>
+          
+    </style>
+    </head>
+    <body>
+      <div class="container-fluid">
+          <div id="header">Stopwatch</div>
+          
+          <div id="lap"><span id="l1">00</span>:<span id="l2">00</span>:<span id="l3">00</span></div>
+          
+          
+           <div id="time"><span id="t1">00</span>:<span id="t2">00</span>:<span id="t3">00</span></div>
+          
+  <div id="buttons" class="row">
+  <div class="col-xs-2 col-xs-offset-4">
+      <div id="start" class="control">start</div>
+         <div id="stop" class="control">stop</div>
+         <div id="resume" class="control">resume</div>
+      </div>
+
+
+      <div class="col-xs-2">
+    <div id="reset" class="control">reset</div>
+      <div id="lap1" class="control">lap</div>
+
+      </div>
+          
+          </div>
+          
+          
+          <div id="laps">
+          </div>
+        </div>
+        
+        
+        
+        
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        
+        
+        
+        
+<script>
+    $(function(){
+ var mode=0;
+var timecounter=0;
+var lapcounter=0;
+var action;
+var lapnumber=0;
+var timemin,timesec,timecentisec,lapmin,lapsec,lapcentisec;
+    
+hideshow("#start","#lap1");
+$("#start").click(function(){
+    mode=1;
+hideshow("#stop","#lap1");
+    startaction();
+});
+
+        
+$("#stop").click(function(){
+    hideshow("#resume", "#reset");
+    clearInterval(action);
+});
+        
+        
+$("#resume").click(function(){
+    hideshow("#stop", "#lap1");
+    startaction();
+});
+            
+$("#reset").click(function(){
+location.reload();
+});   
+                
+$("#lap1").click(function(){
+ if(mode){
+     
+     clearInterval(action);//to stop action
+     lapcounter=0;
+     addlap();
+     startaction();
+}
+});
+    
+    
+    
+    
+    function hideshow(x,y){
+        $(".control").hide();
+        $(x).show();
+        $(y).show();
+    }
+    
+    
+    function startaction(){
+action=setInterval(function(){
+    timecounter++;
+    if(timecounter==100*60*100){
+        timecounter=0;
+    }
+    lapcounter++;
+     if(lapcounter==100*60*100){
+        lapcounter=0;
+    }
+    updatetime();
+},10);   
+    }
+    
+function updatetime(){
+//1 min=60*100centisecond=600centisecond
+timemin=Math.floor(timecounter/6000);
+    
+timesec=Math.floor((timecounter%6000)/100);
+timecentisec=Math.floor((timecounter%6000)%100);
+    $("#t1").text(format(timemin));
+     $("#t2").text(format(timesec));
+     $("#t3").text(format(timecentisec));
+    
+    lapmin=Math.floor(lapcounter/6000);
+    
+lapsec=Math.floor((lapcounter%6000)/100);
+lapcentisec=Math.floor((lapcounter%6000)%100);
+    
+     $("#l1").text(format(lapmin));
+     $("#l2").text(format(lapsec));
+     $("#l3").text(format(lapcentisec));}
+        
+//function to use two numbers like 02 instead of 2
+function format(num){
+    if(num<10){
+        return '0' +num;
+    }
+    else{
+        return num;}
+}
+  
+function addlap(){
+    lapnumber++;
+var mylap='<div class="anshika">'+
+'<div class="gang">'+'Lap'+lapnumber +'</div>'+
+'<div class="war">'+
+'<span>'+format(lapmin) +'</span>'+
+':<span>'+format(lapsec) +'</span>'+
+':<span>'+format(lapcentisec)+'</span>'+
+'</div>'+
+    
+'</div>';
+    $(mylap).prependTo("#laps");
+}
+        
+    });
+
+        </script>
+    </body>
